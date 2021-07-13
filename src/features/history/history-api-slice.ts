@@ -1,18 +1,48 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const DOGS_API_KEY = 'cbfb51a2-84b6-4025-a3e2-ed8616edf311';
 
-interface Breed {
-    title: string;
-    visitId: number,
-    isServiceWithOverbookingRegularDistribution: boolean,
-    referralType: number,
-    status: number,
-    eventId: number,
-    serviceInstanceId: number,
-    assignedFromReservationId: boolean,
-    eventType: number
+interface Doctor {
+  id: number,
+  title: string,
+  name: string,
+  lastname: string,
+  sex: number
 }
+
+interface ExaminationType{
+  name:string,
+  serviceVariantId:number
+}
+
+
+interface Clinic {
+  id: number, 
+  city: string, 
+  address: string, 
+  name: string
+}
+
+interface ExaminationType{
+  name:string,
+  serviceVariantId:number
+}
+
+interface Consultation {
+  title: string;
+  visitId: number,
+  isServiceWithOverbookingRegularDistribution: boolean,
+  referralType: number,
+  status: number,
+  eventId: number,
+  serviceInstanceId: number,
+  assignedFromReservationId: boolean,
+  eventType: number,
+  doctor: Doctor,
+  clinic: Clinic,
+  shortExaminationNames: ExaminationType[],
+
+}
+//{, "dateTo": "2021-07-07T12:00:00", "isServiceWithOverbookingRegularDistribution": false, "shortExaminationNames": [{ "name": "Glukoza / Glucose badanie glukometrem - medycyna orzecznicza", "serviceVariantId": 9357 }], "clinic": { "id": 19, "city": "WARSZAWA", "address": "BOBROWIECKA 1", "name": "LX Warszawa-Bobrowiecka1(parking od ul.Ludwizanki;mapka:https://goo.gl/4vCp9a)" }, "referralType": 0, "status": 4, "clipId": null, "eventId": 351710112, "serviceInstanceId": 351710112, "assignedFromReservationId": false, "date": "2021-07-07T11:30:00", "title": "Diagnostic test", "actions": [], "eventType": 4 }
 
 
 export const apiSlice = createApi({
@@ -20,14 +50,12 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:3000',
     prepareHeaders(headers) {
-      headers.set('x-api-key', DOGS_API_KEY);
-
       return headers;
     },
   }),
   endpoints(builder) {
     return {
-      fetchBreeds: builder.query<Breed[], number | void>({
+      fetchConsultations: builder.query<Consultation[], number | void>({
         query(limit = 10) {
           return `/events?limit=${limit}`;
         },
@@ -36,4 +64,4 @@ export const apiSlice = createApi({
   },
 });
 
-export const { useFetchBreedsQuery } = apiSlice;
+export const { useFetchConsultationsQuery } = apiSlice;

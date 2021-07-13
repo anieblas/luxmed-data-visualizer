@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import './App.css'
-import { useFetchBreedsQuery } from './features/history/history-api-slice';
+import { useFetchConsultationsQuery } from './features/history/history-api-slice';
 
 
 function App() {
 
-  const { data = [] } = useFetchBreedsQuery(5);
+  const { data = [] } = useFetchConsultationsQuery(5);
 
-  return (
+   return (
     <div className="App">
       <header className="App-header">
 
@@ -15,17 +15,21 @@ function App() {
           <table>
             <thead>
               <tr>
-                <th>Type of consultation</th>
-                <th>Picture</th>
+                <th>Type of Examination</th>
+                <th>Examination</th>
+                <th>Doctor name</th>
+                <th>Address</th>
               </tr>
             </thead>
             <tbody>
-              {data.map((breed) => (
-                <tr key={breed.visitId}>
-                  <td>{breed.title}</td>
+              {data.map((consultation) => (
+                <tr key={consultation.visitId}>
+                  <td>{consultation.title}</td>
+                  <td>{consultation.shortExaminationNames ? consultation.shortExaminationNames[0].name : 'cc'}</td>
                   <td>
-                    {breed.eventType}
+                    {consultation.doctor ? (consultation.doctor.title + ' ' + consultation.doctor.name + ' ' + consultation.doctor.lastname) : ''}
                   </td>
+                  <td> {consultation.clinic ? consultation.clinic.address : ''}</td>
                 </tr>
               ))}
             </tbody>
